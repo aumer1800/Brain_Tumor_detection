@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title>NeuroScan AI - Brain Tumor Detection Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i data-lucide="brain-circuit" class="icon-accent"></i>
+                <span>NeuroScan<span class="text-accent">AI</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#hero">Home</a>
+                <a href="#workspace">Analyze MRI</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1>Advanced AI-Powered <br><span class="text-accent">Brain Tumor Detection</span></h1>
+            <p>Upload medical brain MRI scans for instant analysis, accurate tumor identification, and automated visual attention localization map generation.</p>
+            <a href="#workspace" class="btn-primary">Try Now</a>
+        </div>
+    </section>
+
+    <section id="workspace" class="workspace-section">
+        <div class="section-title">
+            <h2>Interactive Analysis Workspace</h2>
+            <p>Upload a diagnostic MRI scan to test the CNN architecture and locate anomaly patterns.</p>
+        </div>
+
+        <div class="workspace-grid">
+            <div class="workspace-card upload-panel">
+                <h3>MRI Input Panel</h3>
+                <div id="drop-zone" class="drop-zone">
+                    <i data-lucide="upload-cloud" class="upload-icon"></i>
+                    <p>Drag &amp; drop diagnostic scan here or <span class="browse-btn" id="browse-trigger">Browse files</span></p>
+                    <input type="file" id="file-input" accept="image/*" hidden />
+                </div>
+
+                <div id="preview-container" class="preview-container hidden">
+                    <h4>Selected MRI Scan</h4>
+                    <img id="mri-preview" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Selected Scan Preview">
+                </div>
+
+                <!--
+                  CRITICAL: type="button" prevents ANY browser from treating
+                  this as a form submit button, which was causing the page reload.
+                  The icon is static HTML only — JS only ever sets textContent,
+                  never innerHTML, so Lucide never re-scans this node.
+                -->
+                <button id="analyze-btn" type="button" class="btn-submit" disabled>
+                    Run AI Analysis
+                </button>
+            </div>
+
+            <div class="workspace-card results-panel">
+                <h3>Diagnostic &amp; Model Metrics Output</h3>
+
+                <div id="placeholder-results" class="placeholder-results">
+                    <i data-lucide="scan-line" class="pulse-icon"></i>
+                    <p>Awaiting scan input. Upload an image file and click "Run AI Analysis" to view clinical metrics.</p>
+                </div>
+
+                <div id="active-results" class="active-results hidden">
+                    <div class="diagnostic-summary">
+                        <div class="result-badge" id="diagnosis-badge">Awaiting Evaluation</div>
+                        <div class="confidence-container">
+                            <span>Classification Confidence:</span>
+                            <span id="confidence-text" class="weight-bold">0.00%</span>
+                        </div>
+                    </div>
+
+                    <div class="visualization-grid">
+                        <div class="vis-box">
+                            <h5>Target Scan</h5>
+                            <img id="result-orig-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Original Scan Target">
+                        </div>
+                        <div class="vis-box">
+                            <h5>Grad-CAM Localization Heatmap</h5>
+                            <div id="heatmap-wrapper">
+                                <img id="result-heatmap-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Model Attention Heatmap" class="hidden">
+                                <p id="heatmap-fallback" class="hidden"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clinical-card" id="clinical-card" style="background-color: var(--bg-card); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--accent);">
+                        <h5 style="color: var(--text-muted); margin-bottom: 0.25rem;">Suggested Clinical Action Plan</h5>
+                        <div style="font-weight: 700; margin-bottom: 0.25rem;">Urgency Status: <span id="t-urgency">--</span></div>
+                        <div style="font-weight: 600; font-size: 1rem;" id="t-action">--</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem;" id="t-details">--</p>
+                    </div>
+
+                    <div class="metrics-dashboard">
+                        <h5>Model Evaluation Matrices (Trained Weights)</h5>
+                        <div class="metrics-grid">
+                            <div class="metric-box"><span class="metric-label">Accuracy</span><span class="metric-value" id="m-acc">--%</span></div>
+                            <div class="metric-box"><span class="metric-label">Precision</span><span class="metric-value" id="m-prec">--%</span></div>
+                            <div class="metric-box"><span class="metric-label">Recall</span><span class="metric-value" id="m-rec">--%</span></div>
+                            <div class="metric-box"><span class="metric-label">F1-Score</span><span class="metric-value" id="m-f1">--%</span></div>
+                            <div class="metric-box"><span class="metric-label">Specificity</span><span class="metric-value" id="m-spec">--%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 NeuroScan AI Platform. Developed for Academic Research Verification.</p>
+    </footer>
+
+    <!-- script.js MUST come before lucide.createIcons() -->
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
